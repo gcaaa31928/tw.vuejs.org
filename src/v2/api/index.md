@@ -3,144 +3,144 @@ title: API
 type: api
 ---
 
-## Global Config
+## 全域設定
 
-`Vue.config` is an object containing Vue's global configurations. You can modify its properties listed below before bootstrapping your application:
+`vue.config` 是一個物件，包含 Vue 的全域設定，可以在啟動應用之前修改下列的屬性：
 
 ### silent
 
-- **Type:** `boolean`
+- **類型：** `boolean`
 
-- **Default:** `false`
+- **預設值：** `false`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.silent = true
   ```
 
-  Suppress all Vue logs and warnings.
+  取消 Vue 所有的日誌與警告。
 
 ### optionMergeStrategies
 
-- **Type:** `{ [key: string]: Function }`
+- **類型：** `{ [key: string]: Function }`
 
-- **Default:** `{}`
+- **預設值：** `{}`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.optionMergeStrategies._my_option = function (parent, child, vm) {
     return child + 1
   }
-
+  
   const Profile = Vue.extend({
     _my_option: 1
   })
-
+  
   // Profile.options._my_option = 2
   ```
 
-  Define custom merging strategies for options.
+  自定義合併策略的選項。
 
-  The merge strategy receives the value of that option defined on the parent and child instances as the first and second arguments, respectively. The context Vue instance is passed as the third argument.
+  合併策略選項分別接受於父實例與子實例上定義的該選項作為第一個參數與第二個參數，Vue 實例上下文作為第三個參數。
 
 - **See also:** [Custom Option Merging Strategies](../guide/mixins.html#Custom-Option-Merge-Strategies)
 
 ### devtools
 
-- **Type:** `boolean`
+- **類型：** `boolean`
 
-- **Default:** `true` (`false` in production builds)
+- **預設值：**`true` (生產環境下為`false` )
 
-- **Usage:**
+- **用法：**
 
   ``` js
-  // make sure to set this synchronously immediately after loading Vue
+  // 請確保於載入 Vue 後，立即同步設置以下內容
   Vue.config.devtools = true
   ```
 
-  Configure whether to allow [vue-devtools](https://github.com/vuejs/vue-devtools) inspection. This option's default value is `true` in development builds and `false` in production builds. You can set it to `true` to enable inspection for production builds.
+  配置是否允許 [vue-devtools](https://github.com/vuejs/vue-devtools) 檢查程式碼，開發環境下預設為 `true`，生產環境下預設為 `false`，生產環境下設為 `true` 可以啟用檢查。
 
 ### errorHandler
 
-- **Type:** `Function`
+- **類型：**`Function`
 
-- **Default:** `undefined`
+- **預設值：** `undefined`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.errorHandler = function (err, vm, info) {
     // handle error
-    // `info` is a Vue-specific error info, e.g. which lifecycle hook
-    // the error was found in. Only available in 2.2.0+
+    // `info` 是 Vue 的特定錯誤訊息，比如錯誤所在的生命週期鉤子
+    // 只於 2.2.0+ 可用
   }
   ```
 
-  Assign a handler for uncaught errors during component render function and watchers. The handler gets called with the error and the Vue instance.
+  指定組件的渲染和觀察期間未捕獲錯誤的處理函數。這個處理函數被調用時，可獲取錯誤訊息和 Vue 實例。
 
-  > In 2.2.0+, this hook also captures errors in component lifecycle hooks. Also, when this hook is `undefined`, captured errors will be logged with `console.error` instead of crashing the app.
+  > 從 2.2.0 起，這個鉤子也會捕獲元件生命週期鉤子裡的錯誤。同樣的，當這個鉤子是 `undefined` 時，被捕獲的錯誤會通過 `console.error` 輸出而避免應用崩潰。
 
-  > In 2.4.0+, this hook also captures errors thrown inside Vue custom event handlers.
+  > 從 2.4.0 起，這個鉤子也會捕獲 Vue 自定義事件處理函數內部的錯誤了。
 
-  > In 2.6.0+, this hook also captures errors thrown inside `v-on` DOM listeners. In addition, if any of the covered hooks or handlers returns a Promise chain (e.g. async functions), the error from that Promise chain will also be handled.
+  > 從 2.6.0 起，這個鉤子也會捕獲 `v-on` DOM 監聽器內部拋出的錯誤。另外，如果任何被覆蓋的鉤子或處理函數回傳一個 Promise 鏈 (例如 async 函數)，則來自其 Promise 鏈的錯誤也會被處理。
 
-  > Error tracking services [Sentry](https://sentry.io/for/vue/) and [Bugsnag](https://docs.bugsnag.com/platforms/browsers/vue/) provide official integrations using this option.
+  > 錯誤追蹤服務 [Sentry](https://sentry.io/) 和 [Bugsnag](https://docs.bugsnag.com/platforms/browsers/vue/) 都透過此選項提供了官方支持。
 
 ### warnHandler
 
-> New in 2.4.0+
+> 2.4.0 新增
 
-- **Type:** `Function`
+- **類型：** `Function`
 
-- **Default:** `undefined`
+- **預設值：** `undefined`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.warnHandler = function (msg, vm, trace) {
-    // `trace` is the component hierarchy trace
+    // `trace` 是元件的繼承關係追蹤
   }
   ```
 
-  Assign a custom handler for runtime Vue warnings. Note this only works during development and is ignored in production.
+  Vue 的執行時警告賦予一個自定義處理函數。注意這只會在開發者環境下生效，在生產環境下則會被忽略。
 
 ### ignoredElements
 
-- **Type:** `Array<string | RegExp>`
+- **類型：** `Array<string | RegExp>`
 
-- **Default:** `[]`
+- **預設值：** `[]`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.ignoredElements = [
     'my-custom-web-component',
     'another-web-component',
-    // Use a `RegExp` to ignore all elements that start with "ion-"
-    // 2.5+ only
+    // 用一個 `RegExp` 忽略所有“ion-”開頭的元素
+    // 僅在 2.5+ 支持
     /^ion-/
   ]
   ```
 
-  Make Vue ignore custom elements defined outside of Vue (e.g., using the Web Components APIs). Otherwise, it will throw a warning about an `Unknown custom element`, assuming that you forgot to register a global component or misspelled a component name.
+  需使 Vue 忽略在 Vue 之外的自定義元素 (e.g. 使用了 Web Components APIs)。否則，它會假設你忘記註冊全域元件或者拼錯了元件名稱，從而拋出一個關於 `Unknown custom element` 的警告。
 
 ### keyCodes
 
-- **Type:** `{ [key: string]: number | Array<number> }`
+- **類型：** `{ [key: string]: number | Array<number> }`
 
-- **Default:** `{}`
+- **預設值：** `{}`
 
-- **Usage:**
+- **用法：**
 
   ``` js
   Vue.config.keyCodes = {
     v: 86,
     f1: 112,
-    // camelCase won`t work
+    // 駝峰式大小寫 (camelCase) 不可用
     mediaPlayPause: 179,
-    // instead you can use kebab-case with double quotation marks
+    // 取而代之的是短橫線連接式 (kebab-case) 且用雙引號括起來
     "media-play-pause": 179,
     up: [38, 87]
   }
@@ -154,15 +154,15 @@ type: api
 
 ### performance
 
-> New in 2.2.0+
+> 2.2.0 新增
 
-- **Type:** `boolean`
+- **類型：** `boolean`
 
-- **Default:** `false (from 2.2.3+)`
+- **預設值：** `false (from 2.2.3+)`
 
-- **Usage**:
+- **用法：**
 
-  Set this to `true` to enable component init, compile, render and patch performance tracing in the browser devtool performance/timeline panel. Only works in development mode and in browsers that support the [performance.mark](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) API.
+  設定為 `true` 以在瀏覽器開發工具的性能/時間線面板中啟用對元件初始化、編譯、渲染和打補丁的效能追蹤。只適用於開發模式和支持 [`performance.mark`](https://developer.mozilla.org/en-US/docs/Web/API/Performance/mark) API 的瀏覽器上。  
 
 ### productionTip
 
@@ -181,8 +181,9 @@ type: api
 ### Vue.extend( options )
 
 - **Arguments:**
-  - `{Object} options`
-
+  
+- `{Object} options`
+  
 - **Usage:**
 
   Create a "subclass" of the base Vue constructor. The argument should be an object containing component options.
@@ -358,8 +359,9 @@ type: api
 ### Vue.use( plugin )
 
 - **Arguments:**
-  - `{Object | Function} plugin`
-
+  
+- `{Object | Function} plugin`
+  
 - **Usage:**
 
   Install a Vue.js plugin. If the plugin is an Object, it must expose an `install` method. If it is a function itself, it will be treated as the install method. The install method will be called with Vue as the argument.
@@ -373,8 +375,9 @@ type: api
 ### Vue.mixin( mixin )
 
 - **Arguments:**
-  - `{Object} mixin`
-
+  
+- `{Object} mixin`
+  
 - **Usage:**
 
   Apply a mixin globally, which affects every Vue instance created afterwards. This can be used by plugin authors to inject custom behavior into components. **Not recommended in application code**.
@@ -384,8 +387,9 @@ type: api
 ### Vue.compile( template )
 
 - **Arguments:**
-  - `{string} template`
-
+  
+- `{string} template`
+  
 - **Usage:**
 
   Compiles a template string into a render function. **Only available in the full build.**
@@ -409,8 +413,9 @@ type: api
 > New in 2.6.0+
 
 - **Arguments:**
-  - `{Object} object`
-
+  
+- `{Object} object`
+  
 - **Usage:**
 
   Make an object reactive. Internally, Vue uses this on the object returned by the `data` function.
@@ -512,11 +517,11 @@ type: api
   With Object-based syntax, you can use following options:
     - `type`: can be one of the following native constructors: `String`, `Number`, `Boolean`, `Array`, `Object`, `Date`, `Function`, `Symbol`, any custom constructor function or an array of those. Will check if a prop has a given type, and will throw a warning if it doesn't. [More information](../guide/components-props.html#Prop-Types) on prop types.
     - `default`: `any`
-    Specifies a default value for the prop. If the prop is not passed, this value will be used instead. Object or array defaults must be returned from a factory function.
+      Specifies a default value for the prop. If the prop is not passed, this value will be used instead. Object or array defaults must be returned from a factory function.
     - `required`: `Boolean`
-    Defines if the prop is required. In a non-production environment, a console warning will be thrown if this value is truthy and the prop is not passed.
+      Defines if the prop is required. In a non-production environment, a console warning will be thrown if this value is truthy and the prop is not passed.
     - `validator`: `Function`
-    Custom validator function that takes the prop value as the sole argument. In a non-production environment, a console warning will be thrown if this function returns a falsy value (i.e. the validation fails). You can read more about prop validation [here](../guide/components-props.html#Prop-Validation).
+      Custom validator function that takes the prop value as the sole argument. In a non-production environment, a console warning will be thrown if this function returns a falsy value (i.e. the validation fails). You can read more about prop validation [here](../guide/components-props.html#Prop-Validation).
 
 - **Example:**
 
@@ -1863,8 +1868,9 @@ type: api
 ### vm.$nextTick( [callback] )
 
 - **Arguments:**
-  - `{Function} [callback]`
-
+  
+- `{Function} [callback]`
+  
 - **Usage:**
 
   Defer the callback to be executed after the next DOM update cycle. Use it immediately after you've changed some data to wait for the DOM update. This is the same as the global `Vue.nextTick`, except that the callback's `this` context is automatically bound to the instance calling this method.
@@ -2321,7 +2327,7 @@ type: api
 
   ```html
   <span v-pre>{{ this will not be compiled }}</span>
-   ```
+  ```
 
 ### v-cloak
 
@@ -2588,8 +2594,9 @@ Used to denote a `<template>` element as a scoped slot.
   - exposes the same props as `<transition>` except `mode`.
 
 - **Events:**
-  - exposes the same events as `<transition>`.
-
+  
+- exposes the same events as `<transition>`.
+  
 - **Usage:**
 
   `<transition-group>` serve as transition effects for **multiple** elements/components. The `<transition-group>` renders a real DOM element. By default it renders a `<span>`, and you can configure what element it should render via the `tag` attribute.
@@ -2691,8 +2698,9 @@ Used to denote a `<template>` element as a scoped slot.
 ### slot
 
 - **Props:**
-  - `name` - string, Used for named slot.
-
+  
+- `name` - string, Used for named slot.
+  
 - **Usage:**
 
   `<slot>` serve as content distribution outlets in component templates. `<slot>` itself will be replaced.
